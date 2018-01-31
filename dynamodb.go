@@ -1,8 +1,6 @@
 package database
 
 import (
-	"log"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -56,17 +54,14 @@ func (d *DynamoDBTable) Get(id string, v interface{}) error {
 
 	ddbresp, err := ddbreq.Send()
 	if err != nil {
-		log.Printf("ERROR: Failed to read DynamoDB record: %s\n", err)
 		return err
 	}
 
 	if len(ddbresp.Item) < 1 {
-		log.Printf("ERROR: Failed to read DynamoDB record: no such record\n")
 		return ErrRecordNotFound
 	}
 
 	if err := dynamodbattribute.UnmarshalMap(ddbresp.Item, v); err != nil {
-		log.Printf("ERROR: Failed to unmarshal DynamoDB record: %s\n", err)
 		return err
 	}
 
@@ -80,7 +75,6 @@ func (d *DynamoDBTable) Put(v interface{}) error {
 	// Marshall the event to DynamoDB attributes
 	item, err := dynamodbattribute.MarshalMap(v)
 	if err != nil {
-		log.Printf("ERROR: Failed to marshal event to DynamoDB object: %s\n", err)
 		return err
 	}
 
@@ -91,7 +85,6 @@ func (d *DynamoDBTable) Put(v interface{}) error {
 	})
 
 	if _, err := ddbreq.Send(); err != nil {
-		log.Printf("ERROR: Failed to write DynamoDB record: %s\n", err)
 		return err
 	}
 
@@ -115,15 +108,9 @@ func (d *DynamoDBTable) Delete(id string) error {
 	})
 
 	if _, err := ddbreq.Send(); err != nil {
-		log.Printf("ERROR: Failed to delete DynamoDB record: %s\n", err)
 		return err
 	}
 
 	return nil
-
-}
-
-// Search for items in the database
-func (d *DynamoDBTable) Search() {
 
 }

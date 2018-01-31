@@ -3,7 +3,7 @@ package database_test
 import (
 	"testing"
 
-	"github.com/paulmaddox/cfpomatic/database"
+	"github.com/paulmaddox/database"
 	"github.com/pborman/uuid"
 	"github.com/stretchr/testify/assert"
 )
